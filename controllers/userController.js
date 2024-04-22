@@ -30,7 +30,7 @@ export const register = catchAsyncError(async (req, res, next) => {
   });
 
   const OTP = user.generateOTP();
-
+  console.log(OTP)
   await user.save();
 
   const message = `Your OTP is ${OTP.code}, It will Expire in 10 minutes`;
