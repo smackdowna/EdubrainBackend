@@ -56,15 +56,23 @@ const schema = new mongoose.Schema({
   },
   numOfVideos: {
     type: Number,
-    default: 0,
+    required: true,
   },
   category: {
     type: String,
     required: true,
   },
-  createdBy: {
+  basePrice:{
+    type:Number,
+    required: true,
+  },
+  discountedPercent:{ 
+    type:Number,
+    required: true,
+  },
+  total_duration:{
     type: String,
-    required: [true, "Enter Course Creator Name"],
+    required: true,
   },
   createdAt: {
     type: Date,

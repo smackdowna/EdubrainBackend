@@ -26,9 +26,9 @@ const schema = new mongoose.Schema({
     enum: ["admin", "user"],
     default: "user",
   },
-  subscription: {
-    id: String,
-    status: String,
+  isAuthorize: {
+    type: String,
+    default: "",
   },
   avatar: {
     public_id: {

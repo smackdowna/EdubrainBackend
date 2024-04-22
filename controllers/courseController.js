@@ -15,9 +15,25 @@ export const getAllCourses = catchAsyncError(async (req, res, next) => {
 
 //create course
 export const createCourse = catchAsyncError(async (req, res, next) => {
-  const { title, description, category, createdBy } = req.body;
+  const {
+    title,
+    description,
+    category,
+    discountedPercent,
+    basePrice,
+    total_duration,
+    numOfVideos,
+  } = req.body;
 
-  if (!title || !description || !category || !createdBy)
+  if (
+    !title ||
+    !description ||
+    !category ||
+    !discountedPercent ||
+    !basePrice ||
+    !total_duration ||
+    !numOfVideos
+  )
     return next(new ErrorHandler("Please add all fields", 400));
 
   const file = req.files["file"][0];
@@ -27,7 +43,10 @@ export const createCourse = catchAsyncError(async (req, res, next) => {
     title,
     description,
     category,
-    createdBy,
+    discountedPercent,
+    basePrice,
+    total_duration,
+    numOfVideos,
     poster: {
       public_id: myCloud.public_id,
       url: myCloud.secure_url,
@@ -50,8 +69,11 @@ export const getCourseLectures = catchAsyncError(async (req, res, next) => {
 
   await course.save();
 
+  const lecturesCount = course.lectures.length;
+
   res.status(200).json({
     success: true,
+    lecturesCount: lecturesCount, 
     lectures: course.lectures,
   });
 });
