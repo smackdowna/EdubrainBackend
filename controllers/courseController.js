@@ -73,7 +73,7 @@ export const getCourseLectures = catchAsyncError(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    lecturesCount: lecturesCount, 
+    lecturesCount: lecturesCount,
     lectures: course.lectures,
   });
 });
@@ -179,7 +179,15 @@ export const updateLecture = catchAsyncError(async (req, res, next) => {
 //update course
 export const updateCourse = catchAsyncError(async (req, res, next) => {
   const { id } = req.params;
-  const { title, description, category, createdBy } = req.body;
+  const {
+    title,
+    description,
+    category,
+    discountedPercent,
+    basePrice,
+    total_duration,
+    numOfVideos
+  } = req.body;
 
   const course = await Course.findById(id);
   if (!course) return next(new ErrorHandler("Course not found", 404));
@@ -198,7 +206,10 @@ export const updateCourse = catchAsyncError(async (req, res, next) => {
   title ? (course.title = title) : null;
   description ? (course.description = description) : null;
   category ? (course.category = category) : null;
-  createdBy ? (course.createdBy = createdBy) : null;
+  discountedPercent ? (course.discountedPercent = discountedPercent) : null;
+  basePrice ? (course.basePrice = basePrice) : null;
+  total_duration ? (course.total_duration = total_duration) : null;
+  numOfVideos ? (course.numOfVideos = numOfVideos) : null;
 
   await course.save();
 
