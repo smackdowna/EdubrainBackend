@@ -89,15 +89,15 @@ export const addLecture = catchAsyncError(async (req, res, next) => {
   if (!course) return next(new ErrorHandler("Course not found", 404));
 
   const file = req.files["file"][0];
-  // const assignment = req.files["pdf"] ? req.files["pdf"][0] : null;
+  const assignment = req.files["pdf"] ? req.files["pdf"][0] : null;
   const fileUri = getDataUri(file);
-  // const assignmentUri = assignment ? getDataUri(assignment) : null;
+  const assignmentUri = assignment ? getDataUri(assignment) : null;
   const myCloud = await cloudinary.v2.uploader.upload(fileUri.content, {
     resource_type: "video",
   });
-  // const myCloudAssignment = await cloudinary.v2.uploader.upload(
-  //   assignmentUri ? assignmentUri.content : null
-  // );
+  const myCloudAssignment = await cloudinary.v2.uploader.upload(
+    assignmentUri ? assignmentUri.content : null
+  );
   course.lectures.push({
     title,
     description,
@@ -105,12 +105,12 @@ export const addLecture = catchAsyncError(async (req, res, next) => {
       public_id: myCloud.public_id,
       url: myCloud.secure_url,
     },
-    // assignment: {
-    //   public_id: myCloudAssignment
-    //     ? myCloudAssignment.public_id
-    //     : "No Assignment",
-    //   url: myCloudAssignment ? myCloudAssignment.secure_url : "No Assignment",
-    // },
+    assignment: {
+      public_id: myCloudAssignment
+        ? myCloudAssignment.public_id
+        : "No Assignment",
+      url: myCloudAssignment ? myCloudAssignment.secure_url : "No Assignment",
+    },
   });
 
   course.numOfVideos = course.lectures.length;
@@ -157,16 +157,16 @@ export const updateLecture = catchAsyncError(async (req, res, next) => {
     };
   }
 
-  // if (req.files && req.files["pdf"]) {
-  //   const assignment = req.files["pdf"][0];
-  //   const assignmentUri = getDataUri(assignment);
-  // const myCloud = await cloudinary.v2.uploader.upload(assignmentUri.content);
-  // await cloudinary.v2.uploader.destroy(lecture.assignment.public_id);
-  //   lecture.assignment = {
-  //     public_id: myCloud.public_id,
-  //     url: myCloud.secure_url,
-  //   };
-  // }
+  if (req.files && req.files["pdf"]) {
+    const assignment = req.files["pdf"][0];
+    const assignmentUri = getDataUri(assignment);
+  const myCloud = await cloudinary.v2.uploader.upload(assignmentUri.content);
+  await cloudinary.v2.uploader.destroy(lecture.assignment.public_id);
+    lecture.assignment = {
+      public_id: myCloud.public_id,
+      url: myCloud.secure_url,
+    };
+  }
 
   await course.save();
 

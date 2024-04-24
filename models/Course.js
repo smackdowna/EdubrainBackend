@@ -33,9 +33,13 @@ const schema = new mongoose.Schema({
         },
       },
       assignment: {
-        base64: {
+        public_id: {
           type: String,
-          default: "No Assignment",
+          required: true,
+        },
+        url: {
+          type: String,
+          required: true,
         },
       },
     },

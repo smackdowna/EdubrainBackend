@@ -4,7 +4,6 @@ import ErrorHandler from "../utils/errorHandler.js";
 import { sendEmail } from "../utils/sendEmail.js";
 import { sendToken } from "../utils/sendToken.js";
 import crypto from "crypto";
-import { Course } from "../models/Course.js";
 
 //register
 export const register = catchAsyncError(async (req, res, next) => {
