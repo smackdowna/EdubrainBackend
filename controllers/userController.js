@@ -31,6 +31,8 @@ export const register = catchAsyncError(async (req, res, next) => {
   const OTP = user.generateOTP();
   await user.save();
 
+
+  console.log(OTP);
   const message = `Your OTP is ${OTP.code}, It will Expire in 10 minutes`;
   await sendEmail(user.email, "Edubrain Verification OTP", message);
   console.log(message);
